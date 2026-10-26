@@ -1,0 +1,10 @@
+{
+  "name": "control-horas-chiguin",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test pruebas.mjs",
+    "check": "npm test && node --check aplicacion.js && node --check calculos.mjs"
+  }
+}

@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Control de horas extraordinarias</title>
+  <style>
+:root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#182336;background:#f4f7fb;font-synthesis:none}*{box-sizing:border-box}body{margin:0}.contenedor{width:min(1130px,calc(100% - 40px));margin:45px auto 100px}.cabecera,.encabezado-panel,.acciones,.detalle{display:flex;align-items:center;justify-content:space-between;gap:16px}.cabecera{margin-bottom:28px;align-items:end}.sobrelinea{font-size:11px;font-weight:800;color:#426bbc;letter-spacing:.18em;margin:0 0 8px}h1{font-size:clamp(28px,4vw,39px);letter-spacing:-.045em;margin:0}h2{font-size:19px;margin:0 0 5px;letter-spacing:-.02em}h3{font-size:15px;margin:0 0 14px}.subtitulo,.encabezado-panel p,.nota,.pie{color:#69768b;font-size:13px}.subtitulo{margin:10px 0 0}.encabezado-panel p{margin:0}.mes-control{min-width:180px}.mes-control label,.campo label{display:block;font-size:12px;font-weight:700;color:#526179;margin-bottom:7px}input,textarea{font:inherit;color:inherit;border:1px solid #d8dfeb;border-radius:10px;background:white;padding:10px 12px;outline-color:#527bd0}input[type=month]{width:100%}.tarjetas{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:22px}.tarjeta,.panel{background:#fff;border:1px solid #e3e8f0;border-radius:16px;box-shadow:0 4px 18px #172d5610}.tarjeta{padding:24px}.etiqueta{font-weight:700;font-size:13px;color:#56657e;display:flex;justify-content:space-between}.punto{width:9px;height:9px;border-radius:50%}.azul{background:#5179da}.verde{background:#1c9f81}.tarjeta strong{display:block;font-size:clamp(26px,3vw,36px);letter-spacing:-.035em;margin:14px 0 19px;font-variant-numeric:tabular-nums}.medidor{background:#ebeff5;height:8px;border-radius:20px;overflow:hidden}.medidor span{display:block;width:0;height:100%;border-radius:20px;background:#557bda;transition:width .2s}.tarjeta:nth-child(2) .medidor span{background:#1c9f81}.medidor span.excedido{background:#d56b43}.detalle{font-size:12px;color:#6d7890;margin-top:12px}.panel{padding:24px;margin-bottom:20px}.encabezado-panel{margin-bottom:16px}.boton{display:inline-flex;align-items:center;justify-content:center;padding:11px 16px;border:1px solid transparent;border-radius:10px;font-size:13px;font-weight:750;cursor:pointer;white-space:nowrap}.principal{background:#285abd;color:#fff}.principal:hover{background:#1b489e}.secundario{background:#f3f6fc;border-color:#d6e0ef;color:#28549c}.sutil{background:transparent;color:#65748d}.boton:focus-visible{outline:3px solid #8dafef}.panel>textarea{width:100%;resize:vertical;min-height:130px;font-size:13px;line-height:1.65}.acciones{justify-content:flex-start;flex-wrap:wrap;margin-top:14px}.acciones span{font-size:12px;color:#63738a}.tabla-scroll{overflow:auto}table{width:100%;border-collapse:collapse;text-align:left;font-size:13px}th{font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:#78849a;background:#f7f9fc}td,th{padding:12px 10px;border-bottom:1px solid #edf0f5}td input[type=time]{padding:6px;width:112px;font-size:12px}td .boton{padding:7px 10px}.tipo{border-radius:7px;background:#eef3fd;color:#4266a4;padding:5px 8px;font-size:11px;font-weight:700;white-space:nowrap}.tipo.especial{background:#e7f8f2;color:#168465}.vacio{text-align:center;color:#8a96a8;padding:30px}.aviso{font-size:12px;color:#aa5b23}.dos-columnas{display:grid;grid-template-columns:1fr 1.3fr;gap:46px}.campo{margin-bottom:16px}.campo input,.campo textarea{width:100%}.campo input[type=number]{max-width:180px}.horarios{display:grid;gap:7px}.horario{display:grid;grid-template-columns:88px 18px 1fr 1fr;align-items:center;gap:9px;font-size:12px}.horario input[type=time]{width:100%;min-width:0;padding:7px;font-size:12px}.horario .nombre-dia{font-weight:650}.horario.inactivo{opacity:.55}.nota{line-height:1.6;margin:0 0 14px}.pie{text-align:center;margin:32px 0}.firma-autor{position:fixed;right:16px;bottom:12px;z-index:20;display:flex;flex-direction:column;align-items:center;width:max-content;max-width:calc(100vw - 32px);padding:7px 11px;pointer-events:none;color:#50627e;background:rgba(244,247,251,.85);border-radius:10px;backdrop-filter:blur(8px);opacity:.78;visibility:visible}.firma-autor strong{font-size:12px;font-weight:750;white-space:nowrap}.firma-autor span{font-size:9px;text-align:center;margin-top:2px}@media(max-width:700px){.contenedor{width:calc(100% - 24px);margin:22px auto 85px}.cabecera{align-items:stretch;flex-direction:column}.tarjetas,.dos-columnas{grid-template-columns:1fr}.panel,.tarjeta{padding:17px}.encabezado-panel{align-items:start;flex-wrap:wrap}.horario{grid-template-columns:78px 18px 1fr 1fr;gap:4px}.horario input[type=time]{font-size:11px;padding:5px}.firma-autor{right:8px;bottom:8px}}
+
+</style>
+  
+</head>
+<body>
+  <main class="contenedor">
+    <header class="cabecera">
+      <div><p class="sobrelinea">CONTROL MENSUAL</p><h1>Horas extraordinarias</h1><p class="subtitulo">Pega tus marcaciones o importa un archivo. Todo se calcula en tu equipo.</p></div>
+      <div class="mes-control"><label for="mes">Mes a revisar</label><input id="mes" type="month"></div>
+    </header>
+    <section class="tarjetas" aria-label="Resumen mensual">
+      <article class="tarjeta"><div class="etiqueta">Lunes a viernes <span class="punto azul"></span></div><strong id="horasLaborales">0 h 00 min</strong><div class="medidor"><span id="barraLaboral"></span></div><div class="detalle"><span id="topeLaboral">Límite 35 h</span><span id="saldoLaboral">35 h disponibles</span></div></article>
+      <article class="tarjeta"><div class="etiqueta">Fines de semana y festivos <span class="punto verde"></span></div><strong id="horasEspeciales">0 h 00 min</strong><div class="medidor"><span id="barraEspecial"></span></div><div class="detalle"><span id="topeEspecial">Límite 30 h</span><span id="saldoEspecial">30 h disponibles</span></div></article>
+    </section>
+    <section class="panel"><div class="encabezado-panel"><div><h2>Importar marcaciones</h2><p>Pega el listado completo, tal como lo copias de tu sistema.</p></div><label class="boton secundario" for="archivo">Subir archivo</label><input id="archivo" type="file" accept=".txt,.csv,.tsv,.xlsx,.html,.htm,text/plain,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden></div>
+      <textarea id="textoMarcaciones" rows="6" spellcheck="false" placeholder="| 01/10/2026 | Entrada | : 06:33 | Salida | : 16:40 |&#10;| 02/10/2026 | Entrada | : 06:29 | Salida | : 19:30 |"></textarea>
+      <div class="acciones"><button id="procesar" class="boton principal">Calcular listado</button><button id="limpiar" class="boton sutil">Borrar marcaciones</button><span id="mensaje" role="status" aria-live="polite"></span></div>
+    </section>
+    <section class="panel"><div class="encabezado-panel"><div><h2>Detalle de marcaciones</h2><p>Puedes corregir una marcación directamente en la tabla.</p></div><button id="exportar" class="boton secundario">Exportar CSV</button></div><div class="tabla-scroll"><table><thead><tr><th>Fecha</th><th>Día</th><th>Entrada</th><th>Salida</th><th>Tipo</th><th>Extra</th><th></th></tr></thead><tbody id="registros"><tr><td colspan="7" class="vacio">Pega un listado para comenzar.</td></tr></tbody></table></div><p id="aviso" class="aviso" role="status"></p></section>
+    <section class="panel configuracion"><div class="encabezado-panel"><div><h2>Configuración personalizada</h2><p>Los horarios y límites se guardan en este navegador.</p></div></div>
+      <div class="dos-columnas"><div><h3>Límites del mes</h3><div class="campo"><label for="limiteLaboral">Lunes a viernes (horas)</label><input id="limiteLaboral" type="number" min="0" max="744" step="0.5"></div><div class="campo"><label for="limiteEspecial">Fines de semana y festivos (horas)</label><input id="limiteEspecial" type="number" min="0" max="744" step="0.5"></div><h3>Festivos del mes</h3><div class="campo"><label for="festivos">Fechas (una por línea, DD/MM/AAAA)</label><textarea id="festivos" rows="4" placeholder="12/10/2026"></textarea></div><p class="nota">Los sábados y domingos se reconocen automáticamente. Los festivos deben indicarse manualmente.</p></div>
+      <div><h3>Horario habitual por día</h3><p class="nota">En días normales solo se cuenta lo trabajado después de la salida habitual. El horario de entrada no suma extras.</p><div id="horarios" class="horarios"></div></div></div>
+      <div class="acciones"><button class="boton principal" id="guardarConfiguracion">Guardar configuración del mes</button><button class="boton sutil" id="restaurar">Restaurar horarios iniciales</button><span id="mensajeConfiguracion" role="status"></span></div>
+    </section>
+    <footer class="pie">Datos guardados únicamente en este navegador · Sin cuentas ni servicios externos</footer>
+  </main>
+  <div id="firmaAutor" class="firma-autor" aria-label="Autoría y versión"><strong>by Chiguin</strong><span id="version"></span></div>
+<script>
+const VERSION = '1.0.0';
+const FIRMA = 'by Chiguin';
+
+const configuracionInicial = {
+  limiteLaboral: 35,
+  limiteEspecial: 30,
+  horario: [
+    { activo: false, entrada: '00:00', salida: '00:00' },
+    { activo: true, entrada: '08:00', salida: '16:00' },
+    { activo: true, entrada: '08:00', salida: '16:00' },
+    { activo: true, entrada: '08:00', salida: '16:00' },
+    { activo: true, entrada: '08:00', salida: '16:00' },
+    { activo: true, entrada: '08:00', salida: '15:00' },
+    { activo: false, entrada: '00:00', salida: '00:00' }
+  ],
+  festivos: []
+};
+
+function minutosDeHora(valor) {
+  if (!/^\d{1,2}:\d{2}$/.test(String(valor || '').trim())) return null;
+  const [hora, minuto] = valor.trim().split(':').map(Number);
+  return hora < 24 && minuto < 60 ? hora * 60 + minuto : null;
+}
+
+function formatearMinutos(cantidad) {
+  const signo = cantidad < 0 ? '−' : '';
+  const absoluto = Math.abs(Math.round(cantidad));
+  return `${signo}${Math.floor(absoluto / 60)} h ${String(absoluto % 60).padStart(2, '0')} min`;
+}
+
+function fechaISO(valor) {
+  const texto = String(valor || '').trim();
+  let anio, mes, dia;
+  let coincidencia = texto.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4})$/);
+  if (coincidencia) [, dia, mes, anio] = coincidencia;
+  else {
+    coincidencia = texto.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (!coincidencia) return null;
+    [, anio, mes, dia] = coincidencia;
+  }
+  const fecha = new Date(Date.UTC(+anio, +mes - 1, +dia));
+  if (fecha.getUTCFullYear() !== +anio || fecha.getUTCMonth() !== +mes - 1 || fecha.getUTCDate() !== +dia) return null;
+  return `${anio}-${String(mes).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+}
+
+function extraerFila(linea) {
+  const fecha = linea.match(/(?:\b\d{1,2}[\/.-]\d{1,2}[\/.-]\d{4}\b|\b\d{4}-\d{2}-\d{2}\b)/);
+  if (!fecha) return null;
+  const resto = linea.slice(fecha.index + fecha[0].length);
+  const horas = [...resto.matchAll(/\b([01]?\d|2[0-3]):([0-5]\d)\b/g)].map(coincidencia => `${coincidencia[1].padStart(2, '0')}:${coincidencia[2]}`);
+  if (horas.length < 2) return { fecha: fechaISO(fecha[0]), error: 'Falta hora de entrada o salida' };
+  return { fecha: fechaISO(fecha[0]), entrada: horas[0], salida: horas[1] };
+}
+
+function interpretarTexto(texto) {
+  const registros = [];
+  const errores = [];
+  const vistos = new Map();
+  String(texto).split(/\r?\n/).forEach((linea, indice) => {
+    const fila = extraerFila(linea);
+    if (!fila) return;
+    if (!fila.fecha || fila.error) {
+      errores.push(`Línea ${indice + 1}: ${fila.error || 'fecha inválida'}`);
+      return;
+    }
+    if (vistos.has(fila.fecha)) {
+      registros[vistos.get(fila.fecha)] = fila;
+    } else {
+      vistos.set(fila.fecha, registros.length);
+      registros.push(fila);
+    }
+  });
+  return { registros: registros.sort((a, b) => a.fecha.localeCompare(b.fecha)), errores };
+}
+
+function calcularRegistro(registro, configuracion) {
+  const fecha = fechaISO(registro.fecha);
+  const entrada = minutosDeHora(registro.entrada);
+  const salida = minutosDeHora(registro.salida);
+  if (!fecha || entrada === null || salida === null) return { ...registro, error: 'Registro incompleto o inválido', minutos: 0 };
+  const dia = new Date(`${fecha}T12:00:00Z`).getUTCDay();
+  const especial = dia === 0 || dia === 6 || configuracion.festivos.includes(fecha);
+  const jornada = configuracion.horario[dia];
+  if (salida < entrada) return { ...registro, error: 'Salida anterior a entrada; revisar marcación', minutos: 0, especial };
+  const minutos = especial ? salida - entrada : jornada?.activo ? Math.max(0, salida - minutosDeHora(jornada.salida)) : 0;
+  return { ...registro, especial, minutos, error: salida === entrada ? 'Entrada y salida iguales; verificar' : null };
+}
+
+function resumir(registros, configuracion, mes) {
+  const detalles = registros.filter(fila => fila.fecha.startsWith(mes)).map(fila => calcularRegistro(fila, configuracion));
+  const laboral = detalles.filter(fila => !fila.especial).reduce((suma, fila) => suma + fila.minutos, 0);
+  const especial = detalles.filter(fila => fila.especial).reduce((suma, fila) => suma + fila.minutos, 0);
+  return {
+    laboral: { acumulado: laboral, limite: Number(configuracion.limiteLaboral) * 60, disponible: Number(configuracion.limiteLaboral) * 60 - laboral },
+    especial: { acumulado: especial, limite: Number(configuracion.limiteEspecial) * 60, disponible: Number(configuracion.limiteEspecial) * 60 - especial },
+    detalles
+  };
+}
+
+const $ = identificador => document.getElementById(identificador);
+const nombresDias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+const claveRegistros = 'chiguin_horas_registros_v1';
+const claveConfiguracion = 'chiguin_horas_config_v1';
+const leerAlmacenado = (clave, defecto) => {
+  try { return JSON.parse(localStorage.getItem(clave)) ?? defecto; } catch { return defecto; }
+};
+let registros = leerAlmacenado(claveRegistros, []);
+let configuraciones = leerAlmacenado(claveConfiguracion, {});
+let configuracion = null;
+
+function mesActual() {
+  const fecha = new Date();
+  return `${fecha.getFullYear()}-${String(fecha.getMonth() + 1).padStart(2, '0')}`;
+}
+
+function guardarRegistros() {
+  localStorage.setItem(claveRegistros, JSON.stringify(registros));
+}
+
+function configuracionDelMes(mes) {
+  return structuredClone(configuraciones[mes] || configuracionInicial);
+}
+
+function cargarConfiguracion() {
+  configuracion = configuracionDelMes($('mes').value);
+  $('limiteLaboral').value = configuracion.limiteLaboral;
+  $('limiteEspecial').value = configuracion.limiteEspecial;
+  $('festivos').value = configuracion.festivos.map(fecha => fecha.split('-').reverse().join('/')).join('\n');
+  $('horarios').replaceChildren();
+  configuracion.horario.forEach((jornada, dia) => {
+    const fila = document.createElement('div');
+    fila.className = `horario${jornada.activo ? '' : ' inactivo'}`;
+    const nombre = document.createElement('span');
+    nombre.className = 'nombre-dia';
+    nombre.textContent = nombresDias[dia];
+    const activo = document.createElement('input');
+    activo.type = 'checkbox';
+    activo.checked = jornada.activo;
+    activo.title = `Jornada habitual activa el ${nombresDias[dia]}`;
+    activo.addEventListener('change', () => fila.classList.toggle('inactivo', !activo.checked));
+    const entrada = document.createElement('input');
+    entrada.type = 'time';
+    entrada.value = jornada.entrada;
+    entrada.title = `Entrada habitual ${nombresDias[dia]}`;
+    const salida = document.createElement('input');
+    salida.type = 'time';
+    salida.value = jornada.salida;
+    salida.title = `Salida habitual ${nombresDias[dia]}`;
+    fila.append(nombre, activo, entrada, salida);
+    $('horarios').append(fila);
+  });
+}
+
+function guardarConfiguracion() {
+  const limiteLaboral = Number($('limiteLaboral').value);
+  const limiteEspecial = Number($('limiteEspecial').value);
+  if (![limiteLaboral, limiteEspecial].every(numero => Number.isFinite(numero) && numero >= 0 && numero <= 744)) {
+    $('mensajeConfiguracion').textContent = 'Revisa los límites ingresados.';
+    return;
+  }
+  const lineasFestivos = $('festivos').value.split(/[\n,;]+/).map(valor => valor.trim()).filter(Boolean);
+  const festivos = lineasFestivos.map(fechaISO);
+  if (festivos.includes(null)) {
+    $('mensajeConfiguracion').textContent = 'Hay una fecha de festivo inválida.';
+    return;
+  }
+  const horario = [...$('horarios').children].map(fila => ({ activo: fila.children[1].checked, entrada: fila.children[2].value, salida: fila.children[3].value }));
+  if (horario.some(dia => !dia.entrada || !dia.salida)) {
+    $('mensajeConfiguracion').textContent = 'Completa los horarios.';
+    return;
+  }
+  configuracion = { limiteLaboral, limiteEspecial, festivos: [...new Set(festivos)], horario };
+  configuraciones[$('mes').value] = structuredClone(configuracion);
+  localStorage.setItem(claveConfiguracion, JSON.stringify(configuraciones));
+  $('mensajeConfiguracion').textContent = 'Configuración guardada para este mes.';
+  dibujar();
+}
+
+function mostrarSaldo(tipo, datos) {
+  const esLaboral = tipo === 'Laboral';
+  $(esLaboral ? 'horasLaborales' : 'horasEspeciales').textContent = formatearMinutos(datos.acumulado);
+  $(esLaboral ? 'topeLaboral' : 'topeEspecial').textContent = `Límite ${datos.limite / 60} h`;
+  const saldo = $(esLaboral ? 'saldoLaboral' : 'saldoEspecial');
+  saldo.textContent = datos.disponible >= 0 ? `${formatearMinutos(datos.disponible)} disponibles` : `${formatearMinutos(-datos.disponible)} excedidas`;
+  saldo.style.color = datos.disponible < 0 ? '#b64b38' : '#277e68';
+  const barra = $(esLaboral ? 'barraLaboral' : 'barraEspecial');
+  barra.style.width = `${datos.limite ? Math.min(100, (datos.acumulado / datos.limite) * 100) : datos.acumulado ? 100 : 0}%`;
+  barra.classList.toggle('excedido', datos.disponible < 0);
+}
+
+function dibujar() {
+  const resumen = resumir(registros, configuracion, $('mes').value);
+  mostrarSaldo('Laboral', resumen.laboral);
+  mostrarSaldo('Especial', resumen.especial);
+  const cuerpo = $('registros');
+  cuerpo.replaceChildren();
+  if (!resumen.detalles.length) {
+    const fila = document.createElement('tr');
+    const celda = document.createElement('td');
+    celda.colSpan = 7;
+    celda.className = 'vacio';
+    celda.textContent = 'No hay marcaciones para este mes.';
+    fila.append(celda);
+    cuerpo.append(fila);
+  }
+  resumen.detalles.forEach(registro => {
+    const fila = document.createElement('tr');
+    const agregar = texto => { const celda = document.createElement('td'); celda.textContent = texto; fila.append(celda); return celda; };
+    agregar(registro.fecha.split('-').reverse().join('/'));
+    agregar(nombresDias[new Date(`${registro.fecha}T12:00:00Z`).getUTCDay()]);
+    ['entrada', 'salida'].forEach(campo => {
+      const celda = document.createElement('td');
+      const control = document.createElement('input');
+      control.type = 'time';
+      control.value = registro[campo];
+      control.setAttribute('aria-label', `${campo} ${registro.fecha}`);
+      control.addEventListener('change', () => {
+        registros = registros.map(fila => fila.fecha === registro.fecha ? { ...fila, [campo]: control.value } : fila);
+        guardarRegistros();
+        dibujar();
+      });
+      celda.append(control);
+      fila.append(celda);
+    });
+    const tipo = agregar(registro.especial ? 'Especial' : 'Laboral');
+    tipo.firstChild?.remove();
+    const insignia = document.createElement('span');
+    insignia.className = `tipo${registro.especial ? ' especial' : ''}`;
+    insignia.textContent = registro.especial ? 'Especial' : 'Laboral';
+    tipo.append(insignia);
+    agregar(formatearMinutos(registro.minutos));
+    const celdaAccion = document.createElement('td');
+    const borrar = document.createElement('button');
+    borrar.className = 'boton sutil';
+    borrar.textContent = 'Quitar';
+    borrar.setAttribute('aria-label', `Eliminar ${registro.fecha}`);
+    borrar.addEventListener('click', () => {
+      registros = registros.filter(fila => fila.fecha !== registro.fecha);
+      guardarRegistros();
+      dibujar();
+    });
+    celdaAccion.append(borrar);
+    fila.append(celdaAccion);
+    cuerpo.append(fila);
+  });
+  const advertencias = resumen.detalles.filter(fila => fila.error).map(fila => `${fila.fecha.split('-').reverse().join('/')}: ${fila.error}`);
+  $('aviso').textContent = advertencias.join(' · ');
+}
+
+function procesar() {
+  const resultado = interpretarTexto($('textoMarcaciones').value);
+  if (!resultado.registros.length) {
+    $('mensaje').textContent = 'No encontré filas con fecha y dos horas. Revisa el formato.';
+    return;
+  }
+  const mapa = new Map(registros.map(fila => [fila.fecha, fila]));
+  resultado.registros.forEach(fila => mapa.set(fila.fecha, fila));
+  registros = [...mapa.values()].sort((a, b) => a.fecha.localeCompare(b.fecha));
+  guardarRegistros();
+  const meses = [...new Set(resultado.registros.map(fila => fila.fecha.slice(0, 7)))];
+  if (meses.length === 1) {
+    $('mes').value = meses[0];
+    cargarConfiguracion();
+  }
+  dibujar();
+  $('mensaje').textContent = `${resultado.registros.length} marcaciones importadas${resultado.errores.length ? ` · ${resultado.errores.length} filas incompletas` : ''}.`;
+}
+
+async function descomprimirExcel(archivo) {
+  const datos = new DataView(await archivo.arrayBuffer());
+  const bytes = new Uint8Array(datos.buffer);
+  const decodificador = new TextDecoder();
+  const archivos = new Map();
+  let posicion = 0;
+  while (posicion + 30 <= datos.byteLength) {
+    if (datos.getUint32(posicion, true) !== 0x04034b50) break;
+    const metodo = datos.getUint16(posicion + 8, true);
+    const banderas = datos.getUint16(posicion + 6, true);
+    const tamano = datos.getUint32(posicion + 18, true);
+    const nombreTamano = datos.getUint16(posicion + 26, true);
+    const extraTamano = datos.getUint16(posicion + 28, true);
+    if (banderas & 8) throw new Error('Este Excel usa un formato ZIP no compatible. Guárdalo como CSV.');
+    const nombre = decodificador.decode(bytes.slice(posicion + 30, posicion + 30 + nombreTamano));
+    const inicio = posicion + 30 + nombreTamano + extraTamano;
+    const bloque = bytes.slice(inicio, inicio + tamano);
+    if (nombre === 'xl/sharedStrings.xml' || /^xl\/worksheets\/sheet\d+\.xml$/.test(nombre)) {
+      let contenido = bloque;
+      if (metodo === 8) {
+        const flujo = new Blob([bloque]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
+        contenido = new Uint8Array(await new Response(flujo).arrayBuffer());
+      } else if (metodo !== 0) throw new Error('Compresión de Excel no compatible.');
+      archivos.set(nombre, decodificador.decode(contenido));
+    }
+    posicion = inicio + tamano;
+  }
+  const lector = new DOMParser();
+  const compartidas = archivos.has('xl/sharedStrings.xml') ? [...lector.parseFromString(archivos.get('xl/sharedStrings.xml'), 'application/xml').getElementsByTagName('si')].map(celda => [...celda.getElementsByTagName('t')].map(nodo => nodo.textContent).join('')) : [];
+  const hoja = [...archivos.keys()].filter(nombre => nombre.startsWith('xl/worksheets/')).sort()[0];
+  if (!hoja) throw new Error('No se encontró una hoja de cálculo legible.');
+  const documento = lector.parseFromString(archivos.get(hoja), 'application/xml');
+  const filas = [...documento.getElementsByTagName('row')].map(fila => {
+    const celdas = [];
+    [...fila.getElementsByTagName('c')].forEach(celda => {
+      const referencia = celda.getAttribute('r') || '';
+      const letras = (referencia.match(/^[A-Z]+/) || ['A'])[0];
+      let posicionColumna = 0;
+      for (const letra of letras) posicionColumna = posicionColumna * 26 + letra.charCodeAt(0) - 64;
+      const tipo = celda.getAttribute('t');
+      const valor = celda.getElementsByTagName('v')[0]?.textContent || '';
+      let texto = tipo === 's' ? compartidas[Number(valor)] || '' : tipo === 'inlineStr' ? celda.getElementsByTagName('t')[0]?.textContent || '' : valor;
+      if (tipo !== 's' && tipo !== 'inlineStr' && /^\d+(\.\d+)?$/.test(texto)) {
+        const numero = Number(texto);
+        if (numero > 20000 && numero < 100000) {
+          const fecha = new Date(Date.UTC(1899, 11, 30) + Math.floor(numero) * 86400000);
+          texto = `${String(fecha.getUTCDate()).padStart(2, '0')}/${String(fecha.getUTCMonth() + 1).padStart(2, '0')}/${fecha.getUTCFullYear()}`;
+        } else if (numero >= 0 && numero < 1) {
+          const minutos = Math.round(numero * 1440);
+          texto = `${String(Math.floor(minutos / 60) % 24).padStart(2, '0')}:${String(minutos % 60).padStart(2, '0')}`;
+        }
+      }
+      celdas[posicionColumna - 1] = String(texto);
+    });
+    return celdas.join(' | ');
+  });
+  return filas.join('\n');
+}
+
+async function importarArchivo(evento) {
+  const archivo = evento.target.files?.[0];
+  if (!archivo) return;
+  try {
+    const texto = archivo.name.toLowerCase().endsWith('.xlsx') ? await descomprimirExcel(archivo) : await archivo.text();
+    $('textoMarcaciones').value = texto;
+    procesar();
+  } catch (error) {
+    $('mensaje').textContent = `No pude leer el archivo: ${error.message}`;
+  }
+  evento.target.value = '';
+}
+
+function exportar() {
+  const lista = registros.filter(fila => fila.fecha.startsWith($('mes').value));
+  const texto = ['Fecha;Entrada;Salida;Tipo;Horas extras', ...lista.map(fila => {
+    const calculado = resumir([fila], configuracion, $('mes').value).detalles[0];
+    return `${fila.fecha.split('-').reverse().join('/')};${fila.entrada};${fila.salida};${calculado.especial ? 'Especial' : 'Laboral'};${formatearMinutos(calculado.minutos)}`;
+  })].join('\r\n');
+  const enlace = document.createElement('a');
+  enlace.href = URL.createObjectURL(new Blob(['\ufeff', texto], { type: 'text/csv;charset=utf-8' }));
+  enlace.download = `horas-extraordinarias-${$('mes').value}.csv`;
+  enlace.click();
+  URL.revokeObjectURL(enlace.href);
+}
+
+$('version').textContent = `v${VERSION}`;
+document.querySelector('#firmaAutor strong').textContent = FIRMA;
+$('mes').value = mesActual();
+cargarConfiguracion();
+dibujar();
+$('mes').addEventListener('change', () => { cargarConfiguracion(); dibujar(); });
+$('procesar').addEventListener('click', procesar);
+$('archivo').addEventListener('change', importarArchivo);
+$('guardarConfiguracion').addEventListener('click', guardarConfiguracion);
+$('restaurar').addEventListener('click', () => { configuraciones[$('mes').value] = structuredClone(configuracionInicial); cargarConfiguracion(); $('mensajeConfiguracion').textContent = 'Horarios iniciales cargados. Pulsa Guardar para confirmar.'; });
+$('limpiar').addEventListener('click', () => {
+  if (!confirm(`¿Borrar las marcaciones de ${$('mes').value}?`)) return;
+  registros = registros.filter(fila => !fila.fecha.startsWith($('mes').value));
+  guardarRegistros();
+  $('textoMarcaciones').value = '';
+  $('mensaje').textContent = 'Marcaciones borradas para este mes.';
+  dibujar();
+});
+$('exportar').addEventListener('click', exportar);
+
+</script>
+</body>
+</html>

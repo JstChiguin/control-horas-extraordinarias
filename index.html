@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Control de horas extraordinarias</title>
+  <link rel="stylesheet" href="estilos.css">
+  <script type="module" src="aplicacion.js"></script>
+</head>
+<body>
+  <main class="contenedor">
+    <header class="cabecera">
+      <div><p class="sobrelinea">CONTROL MENSUAL</p><h1>Horas extraordinarias</h1><p class="subtitulo">Pega tus marcaciones o importa un archivo. Todo se calcula en tu equipo.</p></div>
+      <div class="mes-control"><label for="mes">Mes a revisar</label><input id="mes" type="month"></div>
+    </header>
+    <section class="tarjetas" aria-label="Resumen mensual">
+      <article class="tarjeta"><div class="etiqueta">Lunes a viernes <span class="punto azul"></span></div><strong id="horasLaborales">0 h 00 min</strong><div class="medidor"><span id="barraLaboral"></span></div><div class="detalle"><span id="topeLaboral">Límite 35 h</span><span id="saldoLaboral">35 h disponibles</span></div></article>
+      <article class="tarjeta"><div class="etiqueta">Fines de semana y festivos <span class="punto verde"></span></div><strong id="horasEspeciales">0 h 00 min</strong><div class="medidor"><span id="barraEspecial"></span></div><div class="detalle"><span id="topeEspecial">Límite 30 h</span><span id="saldoEspecial">30 h disponibles</span></div></article>
+    </section>
+    <section class="panel"><div class="encabezado-panel"><div><h2>Importar marcaciones</h2><p>Pega el listado completo, tal como lo copias de tu sistema.</p></div><label class="boton secundario" for="archivo">Subir archivo</label><input id="archivo" type="file" accept=".txt,.csv,.tsv,.xlsx,.html,.htm,text/plain,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden></div>
+      <textarea id="textoMarcaciones" rows="6" spellcheck="false" placeholder="| 01/10/2026 | Entrada | : 06:33 | Salida | : 16:40 |&#10;| 02/10/2026 | Entrada | : 06:29 | Salida | : 19:30 |"></textarea>
+      <div class="acciones"><button id="procesar" class="boton principal">Calcular listado</button><button id="limpiar" class="boton sutil">Borrar marcaciones</button><span id="mensaje" role="status" aria-live="polite"></span></div>
+    </section>
+    <section class="panel"><div class="encabezado-panel"><div><h2>Detalle de marcaciones</h2><p>Puedes corregir una marcación directamente en la tabla.</p></div><button id="exportar" class="boton secundario">Exportar CSV</button></div><div class="tabla-scroll"><table><thead><tr><th>Fecha</th><th>Día</th><th>Entrada</th><th>Salida</th><th>Tipo</th><th>Extra</th><th></th></tr></thead><tbody id="registros"><tr><td colspan="7" class="vacio">Pega un listado para comenzar.</td></tr></tbody></table></div><p id="aviso" class="aviso" role="status"></p></section>
+    <section class="panel configuracion"><div class="encabezado-panel"><div><h2>Configuración personalizada</h2><p>Los horarios y límites se guardan en este navegador.</p></div></div>
+      <div class="dos-columnas"><div><h3>Límites del mes</h3><div class="campo"><label for="limiteLaboral">Lunes a viernes (horas)</label><input id="limiteLaboral" type="number" min="0" max="744" step="0.5"></div><div class="campo"><label for="limiteEspecial">Fines de semana y festivos (horas)</label><input id="limiteEspecial" type="number" min="0" max="744" step="0.5"></div><h3>Festivos del mes</h3><div class="campo"><label for="festivos">Fechas (una por línea, DD/MM/AAAA)</label><textarea id="festivos" rows="4" placeholder="12/10/2026"></textarea></div><p class="nota">Los sábados y domingos se reconocen automáticamente. Los festivos deben indicarse manualmente.</p></div>
+      <div><h3>Horario habitual por día</h3><p class="nota">En días normales solo se cuenta lo trabajado después de la salida habitual. El horario de entrada no suma extras.</p><div id="horarios" class="horarios"></div></div></div>
+      <div class="acciones"><button class="boton principal" id="guardarConfiguracion">Guardar configuración del mes</button><button class="boton sutil" id="restaurar">Restaurar horarios iniciales</button><span id="mensajeConfiguracion" role="status"></span></div>
+    </section>
+    <footer class="pie">Datos guardados únicamente en este navegador · Sin cuentas ni servicios externos</footer>
+  </main>
+  <div id="firmaAutor" class="firma-autor" aria-label="Autoría y versión"><strong>by Chiguin</strong><span id="version"></span></div>
+</body>
+</html>
