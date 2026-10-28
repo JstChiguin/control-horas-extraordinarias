@@ -2,8 +2,8 @@ export const VERSION = '1.0.0';
 export const FIRMA = 'by Chiguin';
 
 export const configuracionInicial = {
-  limiteLaboral: 35,
-  limiteEspecial: 30,
+  limiteLaboral: 0,
+  limiteEspecial: 0,
   horario: [
     { activo: false, entrada: '00:00', salida: '00:00' },
     { activo: true, entrada: '08:00', salida: '16:00' },
